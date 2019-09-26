@@ -1,0 +1,5 @@
+{
+    "require": {
+        "wangcj/helloworld": "dev-master#b5ae2cfe2c787ffd5487b688898c1ef81c2e56a7"
+    }
+}
