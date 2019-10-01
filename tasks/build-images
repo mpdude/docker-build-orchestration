@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -e
+
+for image in composer yarn; do
+    docker build -t docker-build-orchestration/$image docker-images/$image
+done
+

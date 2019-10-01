@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -e
+
+tasks/build-images
+tasks/composer install
+tasks/yarn
+tasks/gulp
+tasks/start-dev

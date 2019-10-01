@@ -1,0 +1,43 @@
+#!/bin/bash
+
+set -e
+
+if [[ $1 == '--self-update' ]]; then
+	curl 'https://raw.githubusercontent.com/chefkoch-dev/container-run/master/run' -o "${BASH_SOURCE[0]}"
+	exit
+fi
+
+if ! APP_DIR="$(git rev-parse --show-toplevel 2>/dev/null)"; then
+    APP_DIR="$(pwd)"
+fi
+
+options=''
+
+if [[ -n ${SSH_AUTH_SOCK} ]]; then
+    options+=" -v ${SSH_AUTH_SOCK}:/run/ssh.sock -e SSH_AUTH_SOCK=/run/ssh.sock"
+fi
+
+for groupId in $(id -G); do
+    options+=" --group-add ${groupId}"
+done
+
+CACHE_CONTAINER=cache-container-$(pwd | (shasum || sha1sum) | awk '{print $1}')
+if ! docker ps -a --no-trunc | grep -q "${CACHE_CONTAINER}"; then
+    docker run -v "${HOME}" -v /root --name="${CACHE_CONTAINER}" busybox install -d -o $(id -u) -g $(id -g) "${HOME}"
+fi
+
+if [ -f ${APP_DIR}/.env ]; then
+    options+=" --env-file=${APP_DIR}/.env"
+fi
+
+docker run --rm \
+    -v "${APP_DIR}":/app \
+    -w /app \
+    --volumes-from="${CACHE_CONTAINER}" \
+    -v /etc/passwd:/etc/passwd:ro \
+    -v /etc/group:/etc/group:ro \
+    -v /run/docker.sock:/run/docker.sock \
+    -e DOCKER_HOST=unix:///run/docker.sock \
+    -u $(id -u):$(id -g) \
+    ${options} \
+    "$@"

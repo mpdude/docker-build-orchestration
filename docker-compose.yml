@@ -1,15 +1,7 @@
 version: "3.2"
 services:
-  apache:
-    build:
-      context: .
-    ports:
-      - "8080:80"
-
-
   apache_dev:
-    build:
-      context: .
+    image: php:7.3-apache
     volumes:
       - .:/var/www
     ports:

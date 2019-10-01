@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -e
+
+[ ! -z $(docker images -q docker-build-orchestration/yarn) ] || (echo "Run tasks/build-images first" && false)
+
+tasks/run docker-build-orchestration/yarn yarn "$@"

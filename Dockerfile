@@ -1,3 +1,4 @@
 FROM php:7.3-apache
 
-COPY . /var/www/
+COPY html /var/www/html
+COPY vendor /var/www/vendor

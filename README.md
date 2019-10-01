@@ -1,17 +1,26 @@
 # Build orchestration demo repository
 
-After you checkout this repo from GitHub, you need to 
+This project uses `https://github.com/chefkoch-dev/container-run` to optimize local docker runs.
+After you checkout this repo from GitHub, you only need to run
+ 
+```
+tasks/install-and-start-dev
+```
 
-* run `yarn` to install JS dependencies
-* run `node_modules/.bin/gulp` to build front-end assets (creates the
+What this will do:
+
+* run `tasks/yarn` to install JS dependencies
+* run `tasks/gulp` to build front-end assets (creates the
   `html/time` file as an example)
-* run `composer install` to fetch PHP dependencies
+* run `tasks/composer install` to fetch PHP dependencies
+* run `tasks/start-dev` to build and run the "dev" image
+ 
+Using the "dev" image, the local directory is mounted into the container running in background. You can
+then run `tasks/gulp` again and observe that the time displayed 
+should change. To stop the dev image, just call `tasks/stop-dev`
 
-Then, run `docker-compose up apache` to build and bring up the "production"
-image where everything is copied into the container. Point your browser to
+Alternatively, run `tasks/start-prod` to build and bring up the "production"
+image where everything is copied into the container.
+
+In either case, point your browser to
 http://localhost:8080.
-
-Alternatively, run `docker-compose up apache_dev` to run the "dev" image. 
-In this image, the local directory is mounted into the container. You can
-then run `node_modules/.bin/gulp` again and observe that the time displayed 
-should change.
