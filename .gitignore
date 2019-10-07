@@ -1,5 +1,6 @@
 *~ 
 vendor/
 node_modules/
+*.built
 *.log
 

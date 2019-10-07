@@ -1,0 +1,13 @@
+version: "3.2"
+services:
+  app:
+    image: mpdude/orchestration-app:development
+    user: ${HOST_UID}
+    environment:
+      HOME: /home
+    volumes:
+      - ../../../:/var/www
+      - ~/.composer:/home/.composer
+    working_dir: /var/www
+    ports:
+      - "8080:1080"

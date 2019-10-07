@@ -2,16 +2,13 @@
 
 After you checkout this repo from GitHub, you need to 
 
+TODO: Do this the same way as running `composer install` but then in a separate node based container
 * run `yarn` to install JS dependencies
 * run `node_modules/.bin/gulp` to build front-end assets (creates the
   `html/time` file as an example)
-* run `composer install` to fetch PHP dependencies
 
-Then, run `docker-compose up apache` to build and bring up the "production"
-image where everything is copied into the container. Point your browser to
-http://localhost:8080.
+Then, run `make up` to build and bring up the "development"
+image where everything is shared into the container. Point your browser to
+http://localhost:8080. 
 
-Alternatively, run `docker-compose up apache_dev` to run the "dev" image. 
-In this image, the local directory is mounted into the container. You can
-then run `node_modules/.bin/gulp` again and observe that the time displayed 
-should change.
+TODO: Add a docker/service/app/dist/Dockerfile which dependens on `vendor/composer/installed.json` and copies all (vendor) code into itself.
