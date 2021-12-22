@@ -83,6 +83,12 @@ When using specialized tooling (beyond shell scripts or Makefiles) to orchestrat
 * Sponsors/backing organisations
 * No (complicated) software dependencies on their own 
 
+### Shared configuration under version control
+
+Some tools under consideration (#3, #12) allow to share configuration (e. g. Dockerfiles or configuration to spin up PHP and a webserver) via GitHub URLs.
+
+Might be a nice-to-have feature when dealing with a multitude of projects that all share a similar structure and tech stack.
+
 ## Building the sample application
 
 To understand, document and illustrate the different approaches to building a dockerized application, I plan to maintain different branches in this repository. Hopefully, that allows to judge the solutions based on the criteria outlined above.
