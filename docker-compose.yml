@@ -1,16 +1,19 @@
-version: "3.2"
+version: "3.4"
 services:
-  apache:
-    build:
-      context: .
-    ports:
-      - "8080:80"
+    php:
+        build:
+            context: .docker/php
+            target: php_base
+        working_dir: $PWD
+        volumes:
+            -   $PWD:$PWD
+        user: $UID:$GID
 
-
-  apache_dev:
-    build:
-      context: .
-    volumes:
-      - .:/var/www
-    ports:
-      - "8080:80"
+    composer:
+        build:
+            context: .docker/php
+            target: php_composer
+        working_dir: $PWD
+        volumes:
+            -   $PWD:$PWD
+        user: $UID:$GID
