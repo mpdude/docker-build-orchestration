@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -e
+
+[ -f "node_modules/.bin/gulp" ] || (echo "Run tasks/yarn first" && false)
+
+tasks/run docker-build-orchestration/yarn node_modules/.bin/gulp "$@"
