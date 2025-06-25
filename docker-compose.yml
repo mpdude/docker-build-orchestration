@@ -1,4 +1,3 @@
-version: "3.4"
 services:
     php:
         build:
@@ -7,7 +6,17 @@ services:
         working_dir: $PWD
         volumes:
             -   $PWD:$PWD
-        user: $UID:$GID
+        user: $uid:$gid
+
+    apache:
+        build:
+            context: .docker/php
+            target: php_apache
+        volumes:
+            -   $PWD:/var/www
+        user: $uid:$gid
+        ports:
+            - "${PORT:-8080}:80"
 
     composer:
         build:
@@ -15,5 +24,31 @@ services:
             target: php_composer
         working_dir: $PWD
         volumes:
+            - $PWD:$PWD
+            - $HOME/.cache/composer:/composer-cache
+            - $HOME/.config/composer:/composer-home
+            - $SSH_AUTH_SOCK:/tmp/auth.sock
+        user: $uid:$gid
+        init: true
+
+    node:
+        build:
+            context: .docker/node
+            target: node_base
+        working_dir: $PWD
+        volumes:
             -   $PWD:$PWD
-        user: $UID:$GID
+        user: $uid:$gid
+
+    yarn:
+        build:
+            context: .docker/node
+            target: node_yarn
+        working_dir: $PWD
+        volumes:
+            - $PWD:$PWD
+            # - $HOME/.cache/yarn:/yarn-cache
+        #user: $uid:$gid
+
+#volumes:
+#    yarn_cache:
