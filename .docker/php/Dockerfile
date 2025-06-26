@@ -14,3 +14,6 @@ ENV COMPOSER_CACHE_DIR=/composer-cache COMPOSER_HOME=/composer-home SSH_AUTH_SOC
 COPY composer-entrypoint.sh /usr/local/bin
 ENTRYPOINT ["/usr/local/bin/composer-entrypoint.sh"]
 #ENTRYPOINT ["/usr/bin/composer"]
+
+FROM php_runtime AS final
+COPY . /var/www

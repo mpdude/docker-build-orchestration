@@ -76,3 +76,6 @@ serve $PORT="8000":
 
 stop:
     {{COMPOSE}} down apache
+
+build-final: build
+    docker buildx build -t build-final --load --target final -f .docker/php/Dockerfile .

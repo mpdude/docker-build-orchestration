@@ -57,6 +57,3 @@ services:
             - $PWD:$PWD
             - $YARN_CACHE:/tmp/.cache/yarn
         user: $uid:$gid
-
-volumes:
-    yarn_cache:
