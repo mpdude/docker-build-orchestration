@@ -5,7 +5,13 @@ export uid:= `id -u`
 export gid := `id -g`
 export PWD := `pwd`
 
-COMPOSE := 'docker-compose'
+# This selects whether to use the PHP build layer including development tools (xdebug),
+# or the plain runtime layer. After a change, "just docker-rebuild" has to be run, otherwise
+# docker compose does not seem to pick up the changed target config.
+#export PHP_TARGET := 'development'
+export PHP_TARGET := 'runtime'
+
+COMPOSE := 'docker compose'
 COMPOSE-RUN := COMPOSE + ' run --rm'
 PHP-RUN := COMPOSE-RUN + ' --no-deps php'
 NODE-RUN := COMPOSE-RUN + ' --no-deps node'
@@ -15,8 +21,8 @@ _default:
 
 # Fetch all vendors/dependencies
 install:
-    {{COMPOSE-RUN}} composer --no-interaction install
-    {{NODE-RUN}} yarn install --non-interactive
+    just composer --no-interaction install
+    just yarn install --non-interactive
 
 # Prepare the project for execution
 build: install
@@ -46,9 +52,13 @@ npm *args:
 gulp *args:
     {{COMPOSE-RUN}} node npx gulp "$@"
 
+# Run a shell in a given service, e. g. "just enter php"
+enter *args:
+    {{COMPOSE-RUN}} --entrypoint /bin/bash "$@"
+
 # Rebuild all necessary Docker images
-docker-rebuild:
-    {{COMPOSE}} build
+docker-rebuild *args:
+    {{COMPOSE}} build "$@"
 
 # Clean artifacts and vendors
 clean:

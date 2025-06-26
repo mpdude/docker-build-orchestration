@@ -2,7 +2,8 @@ services:
     php:
         build:
             context: .docker/php
-            target: php_base
+            target: php_${PHP_TARGET}
+        entrypoint: /usr/local/bin/php
         working_dir: $PWD
         volumes:
             -   $PWD:$PWD
@@ -11,7 +12,7 @@ services:
     apache:
         build:
             context: .docker/php
-            target: php_apache
+            target: php_${PHP_TARGET}
         volumes:
             -   $PWD:/var/www
         user: $uid:$gid
@@ -47,8 +48,8 @@ services:
         working_dir: $PWD
         volumes:
             - $PWD:$PWD
-            # - $HOME/.cache/yarn:/yarn-cache
-        #user: $uid:$gid
+            - yarn_cache:/yarn-cache
+        user: $uid:$gid
 
-#volumes:
-#    yarn_cache:
+volumes:
+    yarn_cache:
