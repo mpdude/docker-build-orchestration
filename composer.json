@@ -1,5 +1,12 @@
 {
+   "repositories": [
+        {
+            "type": "composer",
+            "url": "https://composer.webfactory.de"
+        }
+    ],
     "require": {
-        "rivsen/hello-world": "^0.1.0"
+        "rivsen/hello-world": "^0.1.0",
+        "webfactory/symfony-default-config": "*"
     }
 }

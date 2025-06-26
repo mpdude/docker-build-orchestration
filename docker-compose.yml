@@ -24,12 +24,19 @@ services:
             context: .docker/php
             target: php_composer
         working_dir: $PWD
+        environment:
+            SSH_AUTH_SOCK: /tmp/auth.sock
         volumes:
             - $PWD:$PWD
-            - $HOME/.cache/composer:/composer-cache
-            - $HOME/.config/composer:/composer-home
+            - $HOME/.composer/cache:/composer-cache
+            - $HOME/.composer:/composer-home
+            - $HOME/.ssh/known_hosts:/root/.ssh/known_hosts
             - $SSH_AUTH_SOCK:/tmp/auth.sock
-        user: $uid:$gid
+        # When the `composer` container is run as a non-root user, the ssh client (used by `git clone`)
+        # bails out when it is unable to detect a username. We cannot, however, add a user in the Dockerfile
+        # since the actual UID is runtime-dependent. Creating the user in an entrypoint script is not possible
+        # when the container is not running as root. So, for the time being, run this container as root.
+        #user: $uid:$gid
         init: true
 
     node:

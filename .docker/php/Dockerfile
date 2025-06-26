@@ -10,5 +10,5 @@ COPY 20-xdebug.ini /usr/local/etc/php/conf.d
 FROM php_runtime AS php_composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN apt-get update && apt-get install -y git ssh-client zip
-ENV COMPOSER_CACHE_DIR=/composer-cache COMPOSER_HOME=/composer-home SSH_AUTH_SOCK=/tmp/auth.sock
+ENV COMPOSER_CACHE_DIR=/composer-cache COMPOSER_HOME=/composer-home SSH_AUTH_SOCK=/tmp/auth.sock COMPOSER_ALLOW_SUPERUSER=1
 ENTRYPOINT ["/usr/bin/composer"]
