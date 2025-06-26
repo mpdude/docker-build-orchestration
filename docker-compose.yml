@@ -26,10 +26,11 @@ services:
         working_dir: $PWD
         environment:
             SSH_AUTH_SOCK: /tmp/auth.sock
+            TARGET_UID: $uid
         volumes:
             - $PWD:$PWD
-            - $HOME/.composer/cache:/composer-cache
-            - $HOME/.composer:/composer-home
+            - $COMPOSER_CACHE:/composer-cache
+            - $COMPOSER_HOME:/composer-home
             - $HOME/.ssh/known_hosts:/root/.ssh/known_hosts
             - $SSH_AUTH_SOCK:/tmp/auth.sock
         # When the `composer` container is run as a non-root user, the ssh client (used by `git clone`)

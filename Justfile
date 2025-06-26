@@ -11,6 +11,9 @@ export PWD := `pwd`
 #export PHP_TARGET := 'development'
 export PHP_TARGET := 'runtime'
 
+export COMPOSER_HOME := if path_exists(config_directory() / "composer") == "true" { config_directory() / "composer" } else { home_directory() / ".composer" }
+export COMPOSER_CACHE := if path_exists(cache_directory() / "composer") == "true" { cache_directory() / "composer" } else { home_directory() / ".composer/cache" }
+
 COMPOSE := 'docker compose'
 COMPOSE-RUN := COMPOSE + ' run --rm'
 PHP-RUN := COMPOSE-RUN + ' --no-deps php'
