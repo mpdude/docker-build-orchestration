@@ -55,7 +55,7 @@ services:
         working_dir: $PWD
         volumes:
             - $PWD:$PWD
-            - yarn_cache:/yarn-cache
+            - $YARN_CACHE:/tmp/.cache/yarn
         user: $uid:$gid
 
 volumes:

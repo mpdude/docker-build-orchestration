@@ -13,6 +13,7 @@ export PHP_TARGET := 'runtime'
 
 export COMPOSER_HOME := if path_exists(config_directory() / "composer") == "true" { config_directory() / "composer" } else { home_directory() / ".composer" }
 export COMPOSER_CACHE := if path_exists(cache_directory() / "composer") == "true" { cache_directory() / "composer" } else { home_directory() / ".composer/cache" }
+export YARN_CACHE := if path_exists(cache_directory() / "yarn") == "true" { cache_directory() / "yarn" } else { home_directory() / ".yarn/cache" }
 
 COMPOSE := 'docker compose'
 COMPOSE-RUN := COMPOSE + ' run --rm'
@@ -37,6 +38,9 @@ composer *args:
 
 # Run yarn with arbitrary arguments
 yarn *args:
+    # Make sure the cache dir exists. Otherwise the docker bind-mount would create it with
+    # root permissions, which may lead to errors when running the container as a non-root user
+    mkdir -p {{YARN_CACHE}} || true
     {{COMPOSE-RUN}} yarn "$@"
 
 # Run PHP with arbitrary arguments
