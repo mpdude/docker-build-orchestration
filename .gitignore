@@ -2,3 +2,6 @@
 vendor/
 node_modules/
 *.log
+yarn.lock
+composer.lock
+html/time

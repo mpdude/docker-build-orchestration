@@ -1,16 +1,59 @@
-version: "3.2"
 services:
-  apache:
-    build:
-      context: .
-    ports:
-      - "8080:80"
+    php:
+        build:
+            context: .docker/php
+            target: php_${PHP_TARGET}
+        entrypoint: /usr/local/bin/php
+        working_dir: $PWD
+        volumes:
+            -   $PWD:$PWD
+        user: $uid:$gid
 
+    apache:
+        build:
+            context: .docker/php
+            target: php_${PHP_TARGET}
+        volumes:
+            -   $PWD:/var/www
+        user: $uid:$gid
+        ports:
+            - "${PORT:-8080}:80"
 
-  apache_dev:
-    build:
-      context: .
-    volumes:
-      - .:/var/www
-    ports:
-      - "8080:80"
+    composer:
+        # When the `composer` container is run as a non-root user, the ssh client (used by `git clone`)
+        # bails out when it is unable to detect a username. We cannot, however, add a user in the Dockerfile
+        # since the actual UID is runtime-dependent. So, we have to run this container as root and use an
+        # entrypoint/wrapper script that creates the user at runtime.
+        build:
+            context: .docker/php
+            target: php_composer
+        working_dir: $PWD
+        environment:
+            SSH_AUTH_SOCK: /tmp/auth.sock
+            TARGET_UID: $uid
+        volumes:
+            - $PWD:$PWD
+            - $COMPOSER_CACHE:/composer-cache
+            - $COMPOSER_HOME:/composer-home
+            - $HOME/.ssh/known_hosts:/root/.ssh/known_hosts
+            - $SSH_AUTH_SOCK:/tmp/auth.sock
+        init: true
+
+    node:
+        build:
+            context: .docker/node
+            target: node_base
+        working_dir: $PWD
+        volumes:
+            -   $PWD:$PWD
+        user: $uid:$gid
+
+    yarn:
+        build:
+            context: .docker/node
+            target: node_yarn
+        working_dir: $PWD
+        volumes:
+            - $PWD:$PWD
+            - $YARN_CACHE:/tmp/.cache/yarn
+        user: $uid:$gid
